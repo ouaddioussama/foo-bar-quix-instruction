@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { FooBarQuixService } from '../foo-bar-quix.service';
+import { Result } from '../model/result';
 
 @Component({
   selector: 'app-foo-bar-quix',
@@ -8,18 +8,32 @@ import { FooBarQuixService } from '../foo-bar-quix.service';
 })
 export class FooBarQuixComponent implements OnInit, OnDestroy {
 
+  resultConversion =<Result>{};
+  dataResult :Array<NumberConverted>=[]
+
+
   constructor(private fooBarQuixService: FooBarQuixService) { }
 
-  ngOnInit(): void {
-  }
+    ngOnInit(): void {
+    }
 
-  ngOnDestroy(): void {
-  }
+    ngOnDestroy(): void {
+    }
 
-  convertNumber(inputNumber: number): void {
+
+  convertNumber(inputNumber:number):void{
+    this.fooBarQuixService.getConvertedNumber(inputNumber)
+    .subscribe(
+        (data:any) =>{
+          this.dataResult.push({"numberToConvert":inputNumber,"result":data.result });
+        },
+        (error) =>  console.log(error)
+    )
   }
 
 }
+
+
 
 interface NumberConverted {
   numberToConvert: number;
